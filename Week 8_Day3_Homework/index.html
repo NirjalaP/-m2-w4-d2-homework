@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Food Blog</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap"
+      rel="stylesheet"
+    />
+<link rel="stylesheet" href="style.css">  
+</head>
+  <body>
+    <div id="app">
+      <aside id="leftside"></aside>
+      <aside id="rightside"></aside>
+      <div id="container">
+        <header><span>Food Blog</span></header>
+
+        <main>
+          <aside id="photos">
+            <img src="images/chili.jpg" alt="White Chicken Chili" width="180" />
+          </aside>
+          <h2>Comments</h2>
+
+          <section id="blogposts">
+            <div
+              v-for="(post, index) in Object.values(posts)"
+              :key="index"
+              class="post"
+            >
+              <div class="header">
+                <img
+                  v-bind:src="placeholderImage"
+                  alt="Profile Picture"
+                  class="profile-pic"
+                  @click="showAuthorDetails(post.author)"
+                />
+                <span class="author">{{ post.author }}</span> —
+                <span class="date">{{ post.date }}</span>
+                <span class="reply">REPLY</span>
+              </div>
+              <p>{{ post.content }}</p>
+            </div>
+          </section>
+        </main>
+
+        <footer>&copy; Copyright FOOD BLOG</footer>
+
+        <div v-if="showModal" class="modal">
+          <div class="modal-content">
+            <span class="close" @click="closeModal">&times;</span>
+            <h3>{{ authorDetails.name }}</h3>
+            <p><strong>Foodie Level:</strong> {{ authorDetails.level }}</p>
+            <p><strong>Bio:</strong> {{ authorDetails.bio }}</p>
+            <button @click="closeModal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
