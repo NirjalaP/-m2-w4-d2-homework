@@ -4,77 +4,87 @@
     <title>Food Blog</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css"
-    />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap"
       rel="stylesheet"
     />
     <style>
-      .site-title {
-        font-family: "Sacramento", cursive;
-        color: rgb(216, 150, 7);
-        font-size: 2.75em;
+      * {
+        font-family: Arial, Helvetica, sans-serif;
       }
-
-      .blog-container {
-        background-color: rgba(255, 255, 255, 0.95);
-        border-radius: 0.7em;
-        min-height: 1050px;
-        position: absolute;
-        top: 15%;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 70%;
-        z-index: 1;
-        padding: 2rem;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-      }
-
-      .background-wrapper {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 0;
-      }
-
-      .left-side {
-        position: absolute;
-        left: 0;
+      #leftside {
+        float: left;
         width: 30%;
-        height: 100%;
+        min-height: 1200px;
         background-color: rgb(77, 192, 154);
       }
-
-      .right-side {
-        position: absolute;
-        right: 0;
+      #rightside {
+        float: left;
         width: 70%;
-        height: 100%;
+        min-height: 1200px;
         background-color: rgb(238, 226, 192);
+        position: relative;
       }
-
-      .comments-title {
+      #container {
+        background-color: rgba(255, 255, 255, 0.85);
+        position: absolute;
+        top: 15%;
+        left: 15%;
+        min-width: 1100px;
+        min-height: 1050px;
+        border-radius: 0.7em;
+      }
+      header {
+        height: 50px;
+        background-color: rgba(231, 229, 229, 0.5);
+        font-size: 2.75em;
+        padding: 0.5em;
+        color: rgb(216, 150, 7);
+      }
+      header span {
+        font-family: "Sacramento", cursive;
+      }
+      main {
+        position: relative;
+      }
+      main h2 {
+        position: absolute;
+        left: 20%;
+        top: 30px;
+        margin: 25px 0 200px 50px;
         color: rgb(60, 190, 160);
         text-transform: uppercase;
-        margin: 25px 0;
       }
-
-      .blog-image {
-        border: 0.85em solid rgb(255, 255, 255);
+      main #photos img {
         margin: 0.75em;
+        border: 0.85em solid rgb(255, 255, 255);
       }
-
-      .post {
+      section#blogposts {
+        position: absolute;
+        left: 20%;
+        top: 70px;
+        padding: 50px;
+      }
+      main .post {
         margin: 25px;
         padding: 25px;
         border: 2px solid rgba(83, 78, 58, 0.6);
         border-radius: 0.5em;
+      }
+      footer {
+        position: absolute;
+        bottom: 0;
+        height: 50px;
+        width: 100%;
+        text-align: center;
+        font-size: 0.85em;
+      }
+
+      /* Profile and modal related css */
+      .post {
+        margin-bottom: 20px;
       }
 
       .post .header {
@@ -88,7 +98,6 @@
         border-radius: 5px;
         width: 45px;
         height: 40px;
-        cursor: pointer;
       }
 
       .post .header .author {
@@ -102,64 +111,56 @@
       }
 
       .post .header .reply {
+        /* color: blue; */
         cursor: pointer;
         font-size: 0.9em;
+        /* margin-left: auto; */
+      }
+
+      .post p {
+        margin-top: 5px;
       }
 
       .modal {
-        color: white;
-      }
-
-      .modal-content {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         background: rgba(0, 0, 0, 0.8);
+        color: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        z-index: 1000;
+        border-radius: 10px;
+        width: 200px;
       }
-
-      .nav-link {
-        color: rgb(216, 150, 7) !important;
+      .modal-content {
+        text-align: left;
       }
-
-      footer {
+      .close {
         position: absolute;
-        bottom: 0;
-        width: 100%;
-        padding: 15px;
-        text-align: center;
-        font-size: 0.85em;
-        left: 0;
-      }
-
-      @media (max-width: 768px) {
-        .blog-container {
-          width: 95%;
-          top: 5%;
-        }
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        color: white;
       }
     </style>
   </head>
   <body>
     <div id="app">
-      <!-- Fixed background -->
-      <div class="background-wrapper">
-        <div class="left-side"></div>
-        <div class="right-side"></div>
-      </div>
+      <aside id="leftside"></aside>
+      <aside id="rightside"></aside>
+      <div id="container">
+        <header><span>Food Blog</span></header>
 
-      <!-- Main content -->
-      <div class="blog-container">
-        <header class="mb-4">
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="site-title">Food Blog</span>
-            <nav-menu></nav-menu>
-          </div>
-        </header>
-
-        <main class="row">
-          <aside class="col-md-3">
-            <blog-image></blog-image>
+        <main>
+          <aside id="photos">
+            <img src="images/chili.jpg" alt="White Chicken Chili" width="180" />
           </aside>
+          <h2>Comments</h2>
 
-          <div class="col-md-9">
-            <h2 class="comments-title">Comments</h2>
+          <section id="blogposts">
             <div
               v-for="(post, index) in Object.values(posts)"
               :key="index"
@@ -178,73 +179,24 @@
               </div>
               <p>{{ post.content }}</p>
             </div>
-          </div>
+          </section>
         </main>
 
         <footer>&copy; Copyright FOOD BLOG</footer>
-      </div>
 
-      <!-- Modal -->
-      <div v-if="showModal" class="modal d-block" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div v-if="showModal" class="modal">
           <div class="modal-content">
-            <div class="modal-header border-0">
-              <h5 class="modal-title">{{ authorDetails.name }}</h5>
-              <button
-                type="button"
-                class="close text-white"
-                @click="closeModal"
-              >
-                <span>&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <p><strong>Foodie Level:</strong> {{ authorDetails.level }}</p>
-              <p><strong>Bio:</strong> {{ authorDetails.bio }}</p>
-            </div>
-            <div class="modal-footer border-0">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                @click="closeModal"
-              >
-                Close
-              </button>
-            </div>
+            <span class="close" @click="closeModal">&times;</span>
+            <h3>{{ authorDetails.name }}</h3>
+            <p><strong>Foodie Level:</strong> {{ authorDetails.level }}</p>
+            <p><strong>Bio:</strong> {{ authorDetails.bio }}</p>
+            <button @click="closeModal">Close</button>
           </div>
         </div>
       </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.js"></script>
     <script>
-      // Navigation component
-      Vue.component("nav-menu", {
-        template: `
-          <nav class="navbar navbar-expand-lg">
-            <div class="navbar-nav">
-              <a class="nav-link" href="#">Home</a>
-              <a class="nav-link" href="#">Recipes</a>
-              <a class="nav-link" href="#">Lifestyles</a>
-              <a class="nav-link" href="#">Videos</a>
-              <a class="nav-link" href="#">About</a>
-            </div>
-          </nav>
-        `,
-      });
-
-      // Blog image component
-      Vue.component("blog-image", {
-        data() {
-          return {
-            imageUrl: "images/chili.jpg",
-          };
-        },
-        template: `
-          <img :src="imageUrl" alt="White Chicken Chili" class="blog-image" width="180" />
-        `,
-      });
-
       new Vue({
         el: "#app",
         data: {
@@ -260,25 +212,25 @@
               author: "Brianna",
               date: "February 18, 2021 @ 3:30 pm",
               content:
-                "Was amazing! My Walmart didn't have coriander in stock and didn't have ground cumin. I used serrano instead of jalapeño. It was just like my favorite tortilla soup from BJs. I am sending this recipe to my family. I want everyone to try it!",
+                "Was amazing! My Walmart didn’t have coriander in stock and didn’t have ground cumin. I used serrano instead of jalapeño. It was just like my favorite tortilla soup from BJs. I am sending this recipe to my family. I want everyone to try it!",
             },
             post2: {
               author: "LINH",
               date: "February 15, 2021 @ 9:46 am",
               content:
-                "I just made this soup today and it's so tasty! didn't have corn at home but still turned out very good.  It's a winner!  I made beef chili for my parents; but since my dad has gout he can't eat beef; this white chicken chili is perfect for him.  Thank you Lisa!",
+                "I just made this soup today and it’s so tasty! didn’t have corn at home but still turned out very good.  It’s a winner!  I made beef chili for my parents; but since my dad has gout he can’t eat beef; this white chicken chili is perfect for him.  Thank you Lisa!",
             },
             post3: {
               author: "CATHERINE LEONARDO",
               date: "February 13, 2021 @ 12:58 pm",
               content:
-                "I LOVE this White Chicken Chili! You are right, it is satiating meal—delicious with toasted bread. Refreshingly different taste than any chicken chili I've made in the past. I made it exactly as written and added some chopped zucchini, carrots, and celery. Instead of shredding the chicken, I chopped it into small pieces. It freezes very well. Will be an all-time favorite, for sure.",
+                "I LOVE this White Chicken Chili! You are right, it is satiating meal—delicious with toasted bread. Refreshingly different taste than any chicken chili I’ve made in the past. I made it exactly as written and added some chopped zucchini, carrots, and celery. Instead of shredding the chicken, I chopped it into small pieces. It freezes very well. Will be an all-time favorite, for sure.",
             },
             post4: {
               author: "KALI",
               date: "February 13, 2021 @ 11:31 am",
               content:
-                "This recipe is dynamite! My partner usually won't eat beans but he finished the whole pot (darn was hoping to have some for leftovers haha). This is crowd-pleaser that I am going to add to my regular recipe rotation. Thanks so much, Lisa!",
+                "This recipe is dynamite! My partner usually won’t eat beans but he finished the whole pot (darn was hoping to have some for leftovers haha). This is crowd-pleaser that I am going to add to my regular recipe rotation. Thanks so much, Lisa!",
             },
           },
           authorInfo: {
